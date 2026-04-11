@@ -31,6 +31,28 @@ UPTIME=$(uptime -p | sed 's/up //g')
 
 # Domain: Mengambil dari konfigurasi Nginx/Xray yang ada
 DOMAIN=$(cat /etc/xray/domain 2>/dev/null || echo "Belum Terpasang")
+# Update sistem dan install bahan-bahan pendukung
+apt update -y && apt upgrade -y
+apt install -y vnstat lsb-release curl socat grep sed awk
+
+# Mengaktifkan vnstat untuk memantau trafik (kuota)
+systemctl enable vnstat
+systemctl start vnstat
+
+# Membuat direktori tempat penyimpanan data script
+mkdir -p /etc/xray
+mkdir -p /etc/ssh-vpn
+
+# --- INPUT DATA VPS ---
+read -p "Masukkan Nama Owner/Client: " owner_name
+read -p "Masukkan Domain VPS Anda: " vps_domain
+
+# Menyimpan data input ke dalam sistem agar dibaca oleh dashboard
+echo "$owner_name" > /etc/xray/username
+echo "$vps_domain" > /etc/xray/domain
+
+# Memberikan izin eksekusi pada script menu
+chmod +x menu.sh
 
 # Traffic Usage (Membutuhkan vnstat, jika belum ada akan menampilkan 0)
 TODAY_USAGE=$(vnstat -i eth0 --oneline | cut -d';' -f6 2>/dev/null || echo "0 MB")
