@@ -1,13 +1,11 @@
 #!/bin/bash
-# Proxy For Edukasi & Imclass
-# SL
-# ==========================================
+# Proxy For Edukasi & I
+# =======================================
 
-# Link Hosting Kalian
-akbarvpn="raw.githubusercontent.com/fisabiliyusri/Mantap/main/websocket"
+# Link Hosting Kal
 
 # Getting Proxy Template
-wget -q -O /usr/local/bin/ws-nontls https://${akbarvpn}/websocket.py
+wget -q -O /usr/local/bin/ws-nontls https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/main/websocket.py
 chmod +x /usr/local/bin/ws-nontls
 
 # Installing Service
