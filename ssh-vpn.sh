@@ -187,7 +187,7 @@ wget -O /etc/issue.net "https://${ajivpn}/issue.net"
 # Download Scripts Management (Finishing)
 cd /usr/bin
 wget -O addhost "https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/main/addssh.sh"
-wget -O slhost "https://${ajivpn}/slhost.sh"
+wget -O slhost "https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/main/slhost.sh"
 wget -O menu "https://${ajivpnnnnn}/menu.sh"
 wget -O addssh "https://${ajivpn}/addssh.sh"
 wget -O delssh "https://${ajivpn}/delssh.sh"
