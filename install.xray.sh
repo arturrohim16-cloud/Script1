@@ -58,7 +58,11 @@ uuid3=$(cat /proc/sys/kernel/random/uuid)
 uuid4=$(cat /proc/sys/kernel/random/uuid)
 uuid5=$(cat /proc/sys/kernel/random/uuid)
 
-# 7. Buat Config Xray
+# // Certificate File Path
+path_crt="/etc/xray/xray.crt"
+path_key="/etc/xray/xray.key"
+
+# Buat Config Xray Lengkap
 cat > /etc/xray/config.json << END
 {
   "log": {
@@ -70,22 +74,191 @@ cat > /etc/xray/config.json << END
     {
       "port": 8443,
       "protocol": "vmess",
-      "settings": { "clients": [{ "id": "${uuid1}", "alterId": 0 }] },
+      "settings": {
+        "clients": [
+          {
+            "id": "${uuid1}",
+            "alterId": 0
+#xray-vmess-tls
+          }
+        ]
+      },
       "streamSettings": {
         "network": "ws",
         "security": "tls",
-        "tlsSettings": { "certificates": [{ "certificateFile": "/etc/xray/xray.crt", "keyFile": "/etc/xray/xray.key" }] },
-        "wsSettings": { "path": "/vmess/" }
+        "tlsSettings": {
+          "certificates": [
+            {
+              "certificateFile": "${path_crt}",
+              "keyFile": "${path_key}"
+            }
+          ]
+        },
+        "wsSettings": {
+          "path": "/vmess/",
+          "headers": {
+            "Host": ""
+          }
+        }
+      }
+    },
+    {
+      "port": 80,
+      "protocol": "vmess",
+      "settings": {
+        "clients": [
+          {
+            "id": "${uuid2}",
+            "alterId": 0
+#xray-vmess-nontls
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "ws",
+        "security": "none",
+        "wsSettings": {
+          "path": "/vmess/",
+          "headers": {
+            "Host": ""
+          }
+        }
+      },
+      "sniffing": {
+        "enabled": true,
+        "destOverride": ["http", "tls"]
+      }
+    },
+    {
+      "port": 8443,
+      "protocol": "vless",
+      "settings": {
+        "clients": [
+          {
+            "id": "${uuid3}"
+#xray-vless-tls
+          }
+        ],
+        "decryption": "none"
+      },
+      "streamSettings": {
+        "network": "ws",
+        "security": "tls",
+        "tlsSettings": {
+          "certificates": [
+            {
+              "certificateFile": "${path_crt}",
+              "keyFile": "${path_key}"
+            }
+          ]
+        },
+        "wsSettings": {
+          "path": "/vless/",
+          "headers": {
+            "Host": ""
+          }
+        }
+      },
+      "sniffing": {
+        "enabled": true,
+        "destOverride": ["http", "tls"]
       }
     },
     {
       "port": 80,
       "protocol": "vless",
-      "settings": { "clients": [{ "id": "${uuid4}" }], "decryption": "none" },
-      "streamSettings": { "network": "ws", "security": "none", "wsSettings": { "path": "/vless/" } }
+      "settings": {
+        "clients": [
+          {
+            "id": "${uuid4}"
+#xray-vless-nontls
+          }
+        ],
+        "decryption": "none"
+      },
+      "streamSettings": {
+        "network": "ws",
+        "security": "none",
+        "wsSettings": {
+          "path": "/vless/",
+          "headers": {
+            "Host": ""
+          }
+        }
+      },
+      "sniffing": {
+        "enabled": true,
+        "destOverride": ["http", "tls"]
+      }
+    },
+    {
+      "port": 2083,
+      "protocol": "trojan",
+      "settings": {
+        "clients": [
+          {
+            "password": "${uuid5}"
+#xray-trojan
+          }
+        ],
+        "fallbacks": [
+          {
+            "dest": 80
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "tls",
+        "tlsSettings": {
+          "certificates": [
+            {
+              "certificateFile": "${path_crt}",
+              "keyFile": "${path_key}"
+            }
+          ],
+          "alpn": ["http/1.1"]
+        }
+      }
+     }
+  ],
+  "outbounds": [
+    {
+      "protocol": "freedom",
+      "settings": {}
+    },
+    {
+      "protocol": "blackhole",
+      "settings": {},
+      "tag": "blocked"
     }
   ],
-  "outbounds": [{ "protocol": "freedom", "settings": {} }]
+  "routing": {
+    "rules": [
+      {
+        "type": "field",
+        "ip": ["0.0.0.0/8", "10.0.0.0/8", "127.0.0.1/32"],
+        "outboundTag": "blocked"
+      },
+      {
+        "type": "field",
+        "outboundTag": "blocked",
+        "protocol": ["bittorrent"]
+      }
+    ]
+  },
+  "policy": {
+    "levels": {
+      "0": {
+        "statsUserDownlink": true,
+        "statsUserUplink": true
+      }
+    },
+    "system": {
+      "statsInboundUplink": true,
+      "statsInboundDownlink": true
+    }
+  }
 }
 END
 
