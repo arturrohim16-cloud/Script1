@@ -136,7 +136,7 @@ service sslh restart
 
 # Install Stunnel 5
 cd /root/
-wget -q -O stunnel5.zip "https://${ajivpnnnn}/stunnel5.zip"
+wget -q -O stunnel5.zip "https://github.com/arturrohim16-cloud/Master/blob/bf32992f502103e884009aa986a7f2a5d1ab4bcc/stunnel5/stunnel5.zip"
 unzip -o stunnel5.zip
 cd /root/stunnel
 chmod +x configure
