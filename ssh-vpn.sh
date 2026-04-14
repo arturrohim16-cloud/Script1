@@ -188,7 +188,7 @@ wget -O /etc/issue.net "https://${ajivpn}/issue.net"
 cd /usr/bin
 wget -O addhost "https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/main/addssh.sh"
 wget -O slhost "https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/main/slhost.sh"
-wget -O menu "https://${ajivpnnnnn}/menu.sh"
+wget -O menu "https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/main/menu.sh"
 #wget -O addssh "https://${ajivpn}/addssh.sh"
 wget -O delssh "https://raw.githubusercontent.com/arturrohim16-cloud/Master/refs/heads/main/ssh/delssh.sh"
 wget -O cekssh "https://raw.githubusercontent.com/arturrohim16-cloud/Master/refs/heads/main/ssh/cekssh.sh"
