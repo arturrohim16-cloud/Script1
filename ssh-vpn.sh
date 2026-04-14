@@ -178,7 +178,7 @@ systemctl enable stunnel5
 systemctl restart stunnel5
 
 # OpenVPN
-wget https://${ajivpn}/vpn.sh && chmod +x vpn.sh && ./vpn.sh
+wget https://raw.githubusercontent.com/arturrohim16-cloud/Master/refs/heads/main/ssh/vpn.sh && chmod +x vpn.sh && ./vpn.sh
 
 # Banner
 sed -i 's@DROPBEAR_BANNER=""@DROPBEAR_BANNER="/etc/issue.net"@g' /etc/default/dropbear
