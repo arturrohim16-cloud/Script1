@@ -23,7 +23,7 @@ MYIP=$(wget -qO- ipinfo.io/ip);
 "https://github.com/arturrohim16-cloud/Master/tree/bf32992f502103e884009aa986a7f2a5d1ab4bcc/xray"
 "https://github.com/arturrohim16-cloud/Master/tree/bf32992f502103e884009aa986a7f2a5d1ab4bcc/trojango"
 "https://github.com/arturrohim16-cloud/Master/tree/bf32992f502103e884009aa986a7f2a5d1ab4bcc/stunnel5"
-ajivpnnnnn="raw.githubusercontent.com/arturrohim16-cloud/Script1/main/update"
+"https://github.com/arturrohim16-cloud/Master/tree/bf32992f502103e884009aa986a7f2a5d1ab4bcc/update"
 ajivpnnnnnn="raw.githubusercontent.com/arturrohim16-cloud/Script1/main/websocket"
 
 # Initializing var
