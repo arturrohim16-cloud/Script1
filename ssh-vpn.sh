@@ -190,7 +190,7 @@ wget -O addhost "https://raw.githubusercontent.com/arturrohim16-cloud/Script1/re
 wget -O slhost "https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/main/slhost.sh"
 wget -O menu "https://${ajivpnnnnn}/menu.sh"
 wget -O addssh "https://${ajivpn}/addssh.sh"
-wget -O delssh "https://${ajivpn}/delssh.sh"
+wget -O delssh "https://raw.githubusercontent.com/arturrohim16-cloud/Master/refs/heads/main/ssh/delssh.sh"
 wget -O cekssh "https://${ajivpn}/cekssh.sh"
 wget -O renewssh "https://${ajivpn}/renewssh.sh"
 wget -O addvmess "https://${ajivpnn}/addv2ray.sh"
