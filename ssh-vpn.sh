@@ -22,7 +22,7 @@ MYIP=$(wget -qO- ipinfo.io/ip);
 "https://github.com/arturrohim16-cloud/Master/tree/bf32992f502103e884009aa986a7f2a5d1ab4bcc/ssh"
 "https://github.com/arturrohim16-cloud/Master/tree/bf32992f502103e884009aa986a7f2a5d1ab4bcc/xray"
 "https://github.com/arturrohim16-cloud/Master/tree/bf32992f502103e884009aa986a7f2a5d1ab4bcc/trojango"
-ajivpnnnn="raw.githubusercontent.com/arturrohim16-cloud/Script1/main/stunnel5"
+"https://github.com/arturrohim16-cloud/Master/tree/bf32992f502103e884009aa986a7f2a5d1ab4bcc/stunnel5"
 ajivpnnnnn="raw.githubusercontent.com/arturrohim16-cloud/Script1/main/update"
 ajivpnnnnnn="raw.githubusercontent.com/arturrohim16-cloud/Script1/main/websocket"
 
