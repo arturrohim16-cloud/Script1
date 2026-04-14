@@ -84,7 +84,7 @@ wget https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/mai
 # Ohp Server
 wget https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/main/ohp.sh && chmod +x ohp.sh && ./ohp.sh
 # Install SlowDNS
-wget https://raw.githubusercontent.com/fisabiliyusri/Mantap/main/SLDNS/install-sldns && chmod +x install-sldns && ./install-sldns
+#wget https://raw.githubusercontent.com/fisabiliyusri/Mantap/main/SLDNS/install-sldns && chmod +x install-sldns && ./install-sldns
 # Informasi IP Saya dan Semua Port TCP UDP
 # wget https://raw.githubusercontent.com/fisabiliyusri/Mantap/main/ipsaya.sh && chmod +x ipsaya.sh
 #
