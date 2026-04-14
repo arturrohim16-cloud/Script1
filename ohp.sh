@@ -1,9 +1,11 @@
 #!/bin/bash
 # ==========================================
 # Script Over-HTTP-Puncher (OHP) VVIP - AJI STORE
+#!/bin/bash
+# Open Http Puncher
+# SL
 # ==========================================
-
-# Warna Output Full & Mewah
+# Color
 RED='\033[0;31m'
 NC='\033[0m'
 GREEN='\033[0;32m'
@@ -12,22 +14,32 @@ BLUE='\033[0;34m'
 PURPLE='\033[0;35m'
 CYAN='\033[0;36m'
 LIGHT='\033[0;37m'
-
-# Mengambil Data IP VPS
+# ==========================================
+# Getting
 MYIP=$(wget -qO- ipinfo.io/ip);
+echo "Checking VPS"
+IZIN=$( curl ipinfo.io/ip | grep $MYIP )
+if [ $MYIP = $MYIP ]; then
+echo -e "${NC}${GREEN}Permission Accepted...${NC}"
+else
+echo -e "${NC}${RED}Permission Denied!${NC}";
+echo -e "${NC}${LIGHT}Fuck You!!"
+exit 0
+fi
 
-echo -e "${CYAN}Memulai Instalasi OHP Server (SSH, Dropbear, OpenVPN)...${NC}"
+# Download File Ohp
+wget https://github.com/lfasmpao/open-http-puncher/releases/download/0.1/ohpserver-linux32.zip
+unzip ohpserver-linux32.zip
+chmod +x ohpserver
+cp ohpserver /usr/local/bin/ohpserver
+/bin/rm -rf ohpserver*
 
-# 1. Download Binary OHP (Mesin Utama)
-# Kita letakkan di /usr/bin agar bisa dipanggil sistem kapan saja
-wget -O /usr/bin/ohp "https://raw.githubusercontent.com/fisabiliyusri/Mantap/main/ohp/ohp"
-chmod +x /usr/bin/ohp
-
-# 2. Membuat Service untuk OHP - SSH (Port 8181)
-# Menghubungkan port 8181 ke OpenSSH port 22
-cat > /etc/systemd/system/ohp-ssh.service << END
+# Installing Service
+# SSH OHP Port 8181
+cat > /etc/systemd/system/ssh-ohp.service << END
 [Unit]
-Description=OHP Service For SSH
+Description=SSH OHP Redirection Service
+Documentation=nekopoi.care
 After=network.target nss-lookup.target
 
 [Service]
@@ -36,19 +48,19 @@ User=root
 CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
 AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
 NoNewPrivileges=true
-ExecStart=/usr/bin/ohp -port 8181 -proxy 127.0.0.1:3128 -dest 127.0.0.1:22
+ExecStart=/usr/local/bin/ohpserver -port 8181 -proxy 127.0.0.1:3128 -tunnel 127.0.0.1:22
 Restart=on-failure
-LimitNOFILE=65536
+LimitNOFILE=infinity
 
 [Install]
 WantedBy=multi-user.target
 END
 
-# 3. Membuat Service untuk OHP - Dropbear (Port 8282)
-# Menghubungkan port 8282 ke Dropbear port 109
-cat > /etc/systemd/system/ohp-db.service << END
-[Unit]
-Description=OHP Service For Dropbear
+# Dropbear OHP 8282
+cat > /etc/systemd/system/dropbear-ohp.service << END
+[Unit]]
+Description=Dropbear OHP Redirection Service
+Documentation=https://nekopoi.care
 After=network.target nss-lookup.target
 
 [Service]
@@ -57,19 +69,19 @@ User=root
 CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
 AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
 NoNewPrivileges=true
-ExecStart=/usr/bin/ohp -port 8282 -proxy 127.0.0.1:3128 -dest 127.0.0.1:109
+ExecStart=/usr/local/bin/ohpserver -port 8282 -proxy 127.0.0.1:3128 -tunnel 127.0.0.1:109
 Restart=on-failure
-LimitNOFILE=65536
+LimitNOFILE=infinity
 
 [Install]
 WantedBy=multi-user.target
 END
 
-# 4. Membuat Service untuk OHP - OpenVPN (Port 8383)
-# Menghubungkan port 8383 ke OpenVPN port 1194
-cat > /etc/systemd/system/ohp-ovpn.service << END
-[Unit]
-Description=OHP Service For OpenVPN
+# OpenVPN OHP 8383
+cat > /etc/systemd/system/openvpn-ohp.service << END
+[Unit]]
+Description=OpenVPN OHP Redirection Service
+Documentation=nekopoi.care
 After=network.target nss-lookup.target
 
 [Service]
@@ -78,37 +90,43 @@ User=root
 CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
 AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
 NoNewPrivileges=true
-ExecStart=/usr/bin/ohp -port 8383 -proxy 127.0.0.1:3128 -dest 127.0.0.1:1194
+ExecStart=/usr/local/bin/ohpserver -port 8383 -proxy 127.0.0.1:3128 -tunnel 127.0.0.1:1194
 Restart=on-failure
-LimitNOFILE=65536
+LimitNOFILE=infinity
 
 [Install]
 WantedBy=multi-user.target
 END
 
-# 5. Mengaktifkan dan Menjalankan Seluruh Service OHP
 systemctl daemon-reload
-
-echo -e "${ORANGE}Menjalankan OHP SSH...${NC}"
-systemctl enable ohp-ssh
-systemctl start ohp-ssh
-
-echo -e "${ORANGE}Menjalankan OHP Dropbear...${NC}"
-systemctl enable ohp-db
-systemctl start ohp-db
-
-echo -e "${ORANGE}Menjalankan OHP OpenVPN...${NC}"
-systemctl enable ohp-ovpn
-systemctl start ohp-ovpn
-
-# 6. Pengaturan Firewall (Membuka Port OHP)
-iptables -I INPUT -p tcp --dport 8181 -j ACCEPT
-iptables -I INPUT -p tcp --dport 8282 -j ACCEPT
-iptables -I INPUT -p tcp --dport 8383 -j ACCEPT
-iptables-save > /etc/iptables.up.rules
-
-echo -e "${GREEN}Instalasi OHP Selesai!${NC}"
-echo -e "${PURPLE}OHP SSH      : 8181${NC}"
-echo -e "${PURPLE}OHP Dropbear : 8282${NC}"
-echo -e "${PURPLE}OHP OpenVPN  : 8383${NC}"
-
+systemctl enable ssh-ohp
+systemctl restart ssh-ohp
+systemctl enable dropbear-ohp
+systemctl restart dropbear-ohp
+systemctl enable openvpn-ohp
+systemctl restart openvpn-ohp
+#------------------------------
+printf 'INSTALLATION COMPLETED !\n'
+sleep 0.5
+printf 'CHECKING LISTENING PORT\n'
+if [ -n "$(ss -tupln | grep ohpserver | grep -w 8181)" ]
+then
+	echo 'SSH OHP Redirection Running'
+else
+	echo 'SSH OHP Redirection Not Found, please check manually'
+fi
+sleep 0.5
+if [ -n "$(ss -tupln | grep ohpserver | grep -w 8282)" ]
+then
+	echo 'Dropbear OHP Redirection Running'
+else
+	echo 'Dropbear OHP Redirection Not Found, please check manually'
+fi
+sleep 0.5
+if [ -n "$(ss -tupln | grep ohpserver | grep -w 8383)" ]
+then
+	echo 'OpenVPN OHP Redirection Running'
+else
+	echo 'OpenVPN OHP Redirection Not Found, please check manually'
+fi
+sleep 0.5
