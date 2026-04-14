@@ -82,7 +82,7 @@ wget https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/mai
 # Websocket
 wget https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/main/edu.sh && chmod +x edu.sh && ./edu.sh
 # Ohp Server
-wget https://${akbarvpnnnnnnnnnn}/ohp.sh && chmod +x ohp.sh && ./ohp.sh
+wget https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/main/ohp.sh && chmod +x ohp.sh && ./ohp.sh
 # Install SlowDNS
 wget https://raw.githubusercontent.com/fisabiliyusri/Mantap/main/SLDNS/install-sldns && chmod +x install-sldns && ./install-sldns
 # Informasi IP Saya dan Semua Port TCP UDP
