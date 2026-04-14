@@ -1,0 +1,13 @@
+[Unit]
+Description=Proxy Service AJI-STORE
+After=network.target
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/bin/python3 /usr/local/bin/ws-openssh 8880
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+
