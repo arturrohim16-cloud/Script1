@@ -73,9 +73,9 @@ wget https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/mai
 wget https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/main/sstp.sh && chmod +x sstp.sh && screen -S sstp ./sstp.sh
 #install ssr
 wget https://raw.githubusercontent.com/arturrohim16-cloud/Master/refs/heads/main/ssr/ssr.sh && screen -S ssr ./ssr.sh
-wget https://${akbarvpnnnn}/sodosok.sh && chmod +x sodosok.sh && screen -S ss ./sodosok.sh
+wget https://raw.githubusercontent.com/arturrohim16-cloud/Master/refs/heads/main/shadowsocks/sodosok.sh && chmod +x sodosok.sh && screen -S ss ./sodosok.sh
 #installwg
-wget https://${akbarvpnnnnn}/wg.sh && chmod +x wg.sh && screen -S wg ./wg.sh
+wget https://raw.githubusercontent.com/arturrohim16-cloud/Master/refs/heads/main/wireguard/wg.sh && chmod +x wg.sh && screen -S wg ./wg.sh
 #install L2TP
 wget https://${akbarvpnnnnnnn}/ipsec.sh && chmod +x ipsec.sh && screen -S ipsec ./ipsec.sh
 wget https://${akbarvpnnnnnnnn}/set-br.sh && chmod +x set-br.sh && ./set-br.sh
