@@ -70,7 +70,7 @@ wget https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/mai
 wget https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/main/ins-xray.sh && chmod +x ins-xray.sh && screen -S xray ./ins-xray.sh
 #install ssh ovpn
 wget https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/main/ssh-vpn.sh && chmod +x ssh-vpn.sh && screen -S ssh-vpn ./ssh-vpn.sh
-wget https://${akbarvpnn}/sstp.sh && chmod +x sstp.sh && screen -S sstp ./sstp.sh
+wget https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/main/sstp.sh && chmod +x sstp.sh && screen -S sstp ./sstp.sh
 #install ssr
 wget https://${akbarvpnnn}/ssr.sh && chmod +x ssr.sh && screen -S ssr ./ssr.sh
 wget https://${akbarvpnnnn}/sodosok.sh && chmod +x sodosok.sh && screen -S ss ./sodosok.sh
