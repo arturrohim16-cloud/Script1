@@ -191,7 +191,7 @@ wget -O slhost "https://raw.githubusercontent.com/arturrohim16-cloud/Script1/ref
 wget -O menu "https://${ajivpnnnnn}/menu.sh"
 wget -O addssh "https://${ajivpn}/addssh.sh"
 wget -O delssh "https://raw.githubusercontent.com/arturrohim16-cloud/Master/refs/heads/main/ssh/delssh.sh"
-wget -O cekssh "https://${ajivpn}/cekssh.sh"
+wget -O cekssh "https://raw.githubusercontent.com/arturrohim16-cloud/Master/refs/heads/main/ssh/cekssh.sh"
 wget -O renewssh "https://${ajivpn}/renewssh.sh"
 wget -O addvmess "https://${ajivpnn}/addv2ray.sh"
 wget -O addvless "https://${ajivpnn}/addvless.sh"
