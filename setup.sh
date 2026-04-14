@@ -72,7 +72,7 @@ wget https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/mai
 wget https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/main/ssh-vpn.sh && chmod +x ssh-vpn.sh && screen -S ssh-vpn ./ssh-vpn.sh
 wget https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/main/sstp.sh && chmod +x sstp.sh && screen -S sstp ./sstp.sh
 #install ssr
-wget https://${akbarvpnnn}/ssr.sh && chmod +x ssr.sh && screen -S ssr ./ssr.sh
+wget https://raw.githubusercontent.com/arturrohim16-cloud/Master/refs/heads/main/ssr/ssr.sh && screen -S ssr ./ssr.sh
 wget https://${akbarvpnnnn}/sodosok.sh && chmod +x sodosok.sh && screen -S ss ./sodosok.sh
 #installwg
 wget https://${akbarvpnnnnn}/wg.sh && chmod +x wg.sh && screen -S wg ./wg.sh
