@@ -61,7 +61,7 @@ systemctl enable ws-ovpn
 systemctl restart ws-ovpn
 
 # Getting Proxy Template
-wget -q -O /usr/local/bin/ws-tls https://${akbarvpn}/ws-tls
+wget -q -O /usr/local/bin/ws-tls https://raw.githubusercontent.com/arturrohim16-cloud/Master/refs/heads/main/websocket/ws-tls
 chmod +x /usr/local/bin/ws-tls
 
 # Installing Service
