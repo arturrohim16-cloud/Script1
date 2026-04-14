@@ -98,11 +98,11 @@ mkdir -p /home/vps/public_html
 echo "<?php phpinfo() ?>" > /home/vps/public_html/info.php
 chown -R www-data:www-data /home/vps/public_html
 chmod -R g+rw /home/vps/public_html
-wget -O /home/vps/public_html/index.html "https://${ajivpn}/index.html1"
+wget -O /home/vps/public_html/index.html1 "https://raw.githubusercontent.com/arturrohim16-cloud/Master/refs/heads/main/ssh/index.html1"
 /etc/init.d/nginx restart
 
 # Install Badvpn UDPGW
-wget -O /usr/bin/badvpn-udpgw "https://${ajivpn}/badvpn-udpgw64"
+wget -O /usr/bin/badvpn-udpgw "https://github.com/arturrohim16-cloud/Master/blob/bf32992f502103e884009aa986a7f2a5d1ab4bcc/ssh/badvpn-udpgw64"
 chmod +x /usr/bin/badvpn-udpgw
 sed -i '$ i\screen -dmS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7100 --max-clients 500' /etc/rc.local
 sed -i '$ i\screen -dmS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7200 --max-clients 500' /etc/rc.local
