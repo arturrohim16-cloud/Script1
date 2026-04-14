@@ -136,14 +136,14 @@ service sslh restart
 
 # Install Stunnel 5
 cd /root/
-wget -q -O stunnel5.zip "https://github.com/arturrohim16-cloud/Master/blob/bf32992f502103e884009aa986a7f2a5d1ab4bcc/stunnel5/stunnel5.zip"
-unzip -o stunnel5.zip
+wget -q -O stunnel5.sh "https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/main/stunnel5.sh"
+unzip -o stunnel5.sh
 cd /root/stunnel
 chmod +x configure
 ./configure && make && make install
 cd /root
 rm -r -f stunnel
-rm -f stunnel5.zip
+rm -f stunnel5.sh
 mkdir -p /etc/stunnel5
 
 cat > /etc/stunnel5/stunnel5.conf <<-END
