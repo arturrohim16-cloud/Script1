@@ -3,26 +3,30 @@ red='\e[1;31m'
 green='\e[0;32m'
 NC='\e[0m'
 
-# 1. Cek apakah file domain sudah ada
+# Mengambil domain dari file yang sudah ada
 if [ -f "/etc/xray/domain" ]; then
     SUB_DOMAIN=$(cat /etc/xray/domain)
-    echo -e "${green}Menggunakan domain yang tersimpan: $SUB_DOMAIN${NC}"
 else
     echo -e "${red}Error: File /etc/xray/domain tidak ditemukan!${NC}"
     exit 1
 fi
 
-# 2. Ambil NS_DOMAIN jika ada, jika tidak ada buat baru berdasarkan SUB_DOMAIN
+# Mengambil NS domain
 if [ -f "/root/nsdomain" ]; then
     NS_DOMAIN=$(cat /root/nsdomain)
 else
     NS_DOMAIN="ns-${SUB_DOMAIN}"
 fi
 
-# Konfigurasi Cloudflare
-DOMAIN="mantapxsl.my.id"
-CF_ID="slinfinity69@gmail.com"
-CF_KEY="dd2c5e0313f122b3c1833471d469b1025f492"
+# Update konfigurasi lokal tanpa menyentuh API Cloudflare
+mkdir -p /usr/bin/xray /usr/bin/v2ray /etc/xray /etc/v2ray /var/lib/crot/
+
+echo "IP=$SUB_DOMAIN" > /var/lib/crot/ipvps.conf
+echo "$SUB_DOMAIN" > /root/domain
+echo "$SUB_DOMAIN" > /etc/v2ray/domain
+echo "$NS_DOMAIN" > /root/nsdomain
+
+echo -e "${green}Konfigurasi lokal berhasil diperbarui menggunakan domain: $SUB_DOMAIN${NC}"
 
 set -euo pipefail
 IP=$(wget -qO- icanhazip.com);
