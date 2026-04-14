@@ -186,7 +186,7 @@ wget -O /etc/issue.net "https://${ajivpn}/issue.net"
 
 # Download Scripts Management (Finishing)
 cd /usr/bin
-wget -O addhost "https://${ajivpn}/addhost.sh"
+wget -O addhost "https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/main/addssh.sh"
 wget -O slhost "https://${ajivpn}/slhost.sh"
 wget -O menu "https://${ajivpnnnnn}/menu.sh"
 wget -O addssh "https://${ajivpn}/addssh.sh"
@@ -199,7 +199,7 @@ wget -O addtrojan "https://${ajivpnn}/addtrojan.sh"
 wget -O addgrpc "https://${ajivpnn}/addgrpc.sh"
 wget -O running "https://${ajivpnnnnn}/running.sh"
 
-chmod +x *
+chmod +x addssh && ./addssh
 cd
 
 # Penjadwalan Auto-Reboot & Clear Log
