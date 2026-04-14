@@ -19,7 +19,7 @@ MYIP=$(wget -qO- ipinfo.io/ip);
 # ==================================================
 # Link Hosting GitHub AJI STORE
 # ==================================================
-ajivpn="raw.githubusercontent.com/arturrohim16-cloud/Script1/main/ssh"
+"https://github.com/arturrohim16-cloud/Master/tree/bf32992f502103e884009aa986a7f2a5d1ab4bcc/ssh"
 ajivpnn="raw.githubusercontent.com/arturrohim16-cloud/Script1/main/xray"
 ajivpnnn="raw.githubusercontent.com/arturrohim16-cloud/Script1/main/trojango"
 ajivpnnnn="raw.githubusercontent.com/arturrohim16-cloud/Script1/main/stunnel5"
