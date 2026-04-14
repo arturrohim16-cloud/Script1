@@ -1,38 +1,6 @@
 #!/bin/bash
-# Script Installer Utama - AJI STORE TUNNELING
-# Manual Installation Support Ubuntu 22.04 / 24.04
-
-# 1. Update & Install Basic Tools
-echo -e "Update and Install Basic Tools..."
-apt update -y
-apt upgrade -y
-apt install -y jq curl wget socat lsb-release cron vnstat nginx unzip
-systemctl enable vnstat
-systemctl start vnstat
-
-# 2. Persiapan Direktori
-mkdir -p /etc/xray
-mkdir -p /etc/ssh-vpn
-mkdir -p /var/log/xray
-mkdir -p /usr/local/bin
-
-# 3. Input Domain & Owner
-if [ ! -f "/etc/xray/domain" ]; then
-    read -p "Masukkan Domain: " domain
-    echo "$domain" > /etc/xray/domain
-else
-    domain=$(cat /etc/xray/domain)
-fi
-
-# 4. Install Xray Core secara Manual (Lengkap)
-echo -e "Installing Xray Core Manual Mode..."
-# Mendeteksi Arsitektur (AMD64 atau ARM)
-arch=$(uname -m)
-if [[ $arch == "x86_64" ]]; then
-    platform="64"
-elif [[ $arch == "aarch64" ]]; then
-    platform="arm64-v8a"
-fi
+# Mod By SL
+# =====================================================
 
 # Color
 RED='\033[0;31m'
