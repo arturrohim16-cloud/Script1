@@ -39,55 +39,111 @@ mkdir -p /var/log/accel-ppp
 cat > /etc/accel-ppp.conf << END
 [modules]
 log_file
+log_syslog
+#pptp
+#l2tp
 sstp
+chap-secrets
+auth_mschap_v2
+auth_mschap_v1
+auth_chap_md5
+auth_pap
 ippool
 pppd_compat
-auth_mschap_v2
 
 [core]
-log-error=/var/log/accel-ppp/core.log
-thread-count=4
+#thread-count=4
 
 [common]
-# Menggunakan DNS Google
-sid=1
-single-session=replace
-check-interval=0
-max-sessions=1000
+
+[chap-secrets]
+chap-secrets=/home/sstp/sstp_account
+
+[ppp]
+min-mtu=1280
+mtu=1400
+mru=1400
+mppe=prefer
+ipv4=require
+lcp-echo-interval=20
+lcp-echo-timeout=120
+
+#[pptp]
+#verbose=1
+#ip-pool=pptp
+#ifname=pptp%d
+
+#[l2tp]
+#verbose=1
+#mppe=deny
+#host-name=accel-ppp
+#secret=
+#ip-pool=l2tp
+#ifname=l2tp%d
 
 [sstp]
-verbose=1
-# Port standar SSTP yang diminta
+#cert-hash-proto=sha1,sha256
+#cert-hash-sha1=
+#cert-hash-sha256=
+#ssl-ecdh-curve=prime256v1
+#ssl-prefer-server-ciphers=0
+#ssl-dhparam=/home/sstp/dh.pem
+#host-name=domain.tld
+#http-error=allow
+#timeout=60
 port=444
-# Menggunakan sertifikat Xray yang sudah ada
-cert=/etc/xray/xray.crt
-key=/etc/xray/xray.key
-hash-algo=sha1
-timeout=60
+accept=ssl
+ssl-ciphers=DEFAULT
+ssl-protocol=tls1,tls1.1,tls1.2,tls1.3
+ssl-ca-file=/home/sstp/ca.crt
+ssl-pemfile=/home/sstp/server.crt
+ssl-keyfile=/home/sstp/server.key
+ip-pool=sstp
+ifname=sstp%d
 
-[ippool]
-# Range IP internal untuk client SSTP
-gw-ip-address=192.168.100.1
-192.168.100.2-255
+[dns]
+dns1=8.8.8.8
+dns2=8.8.4.4
 
-[auth]
-# Method enkripsi
-any-login=0
-noauth=0
+[client-ip-range]
+0.0.0.0/0
 
-[log]
-log-file=/var/log/accel-ppp/accel-ppp.log
-log-emerg=/var/log/accel-ppp/emerg.log
-log-fail-pass=1
-copy=1
-level=3
+[ip-pool]
+gw-ip-address=xxxxxxxxx
+attr=Framed-Pool
+172.63.11.3-254,name=sstp
+172.63.12.3-254,name=l2tp,next=sstp
+172.63.13.3-254,name=pptp,next=l2tp
 
 [pppd-compat]
-# Memastikan kompatibilitas dengan sistem login linux
 ip-up=/etc/ppp/ip-up
 ip-down=/etc/ppp/ip-down
 radattr-prefix=/var/run/radattr
+
+[log]
+#log-debug=/dev/stdout
+#syslog=accel-pppd,daemon
+#log-tcp=127.0.0.1:3000
+#color=1
+#per-user-dir=per_user
+#per-session-dir=per_session
+#per-session=1
+log-file=/var/log/accel-ppp/accel-ppp.log
+log-emerg=/var/log/accel-ppp/emerg.log
+log-fail-file=/var/log/accel-ppp/auth-fail.log
+copy=1
+level=3
+
+[log-pgsql]
+conninfo=user=log
+log-table=log
+
+[cli]
+#password=123
+#sessions-columns=ifname,username,ip,ip6,ip6-dp,type,state,uptime,uptime-raw,calling-sid,called-sid,sid,comp,rx-bytes,tx-bytes,rx-bytes-raw,tx-bytes-raw,rx-pkts,tx-pkts
 verbose=1
+telnet=127.0.0.1:2000
+tcp=127.0.0.1:2001  
 END
 
 # 4. Membuat Service Systemd agar SSTP jalan otomatis
