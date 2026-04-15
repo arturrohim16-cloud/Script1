@@ -1,0 +1,63 @@
+#!/usr/bin/python3
+import socket, threading, sys, select
+
+# --- KONFIGURASI ---
+# LISTENING_PORT = Port internal (biasanya 443 atau port khusus yang diarahakan dari Stunnel)
+# TARGET_PORT = Port SSH (Dropbear: 143 atau OpenSSH: 22)
+LISTENING_ADDR = '0.0.0.0'
+LISTENING_PORT = 443
+TARGET_HOST = '127.0.0.1'
+TARGET_PORT = 143 
+
+class Proxy:
+    def __init__(self, client):
+        self.client = client
+        self.target = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.target.connect((TARGET_HOST, TARGET_PORT))
+        self.run()
+
+    def run(self):
+        self.client.setblocking(0)
+        self.target.setblocking(0)
+        
+        while True:
+            readable, writable, errors = select.select([self.client, self.target], [], [self.client, self.target])
+            if errors: break
+            if readable:
+                if self.client in readable:
+                    data = self.client.recv(4096)
+                    if data:
+                        if self.target.send(data) <= 0: break
+                    else: break
+                if self.target in readable:
+                    data = self.target.recv(4096)
+                    if data:
+                        if self.client.send(data) <= 0: break
+                    else: break
+
+def server():
+    print(f"WS-Stunnel Started on Port {LISTENING_PORT}")
+    server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    server_sock.bind((LISTENING_ADDR, LISTENING_PORT))
+    server_sock.listen(100)
+    
+    while True:
+        client_sock, addr = server_sock.accept()
+        try:
+            header = client_sock.recv(1024).decode('utf-8', errors='ignore')
+            if "Upgrade: websocket" in header or "Connection: Upgrade" in header:
+                client_sock.send(b"HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\n\r\n")
+                thread = threading.Thread(target=Proxy, args=(client_sock,))
+                thread.start()
+            else:
+                client_sock.close()
+        except:
+            client_sock.close()
+
+if __name__ == '__main__':
+    try:
+        server()
+    except KeyboardInterrupt:
+        sys.exit(0)
+
