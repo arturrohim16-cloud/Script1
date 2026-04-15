@@ -19,14 +19,12 @@ apt update && apt upgrade -y
 apt install -y dropbear stunnel4 openssl wget curl
 
 mkdir -p /var/lib/tunnel
-# Mengambil domain yang tersimpan di VPS secara otomatis
 domain=$(cat /etc/xray/domain)
 
-# Membuat sertifikat dengan domain yang sedang aktif
 openssl req -new -x509 -days 3650 -nodes -out /var/lib/tunnel/server.crt -keyout /var/lib/tunnel/server.key -subj "/C=ID/ST=Jawa/L=Jakarta/O=AjiStore/CN=${domain}"
 
-chmod 600 /etc/xray/tunnel/server.key
-chmod 644 /etc/xray/tunnel/server.crt
+chmod 600 /var/lib/tunnel/server.key
+chmod 644 /var/lib/tunnel/server.crt
 
 apt -y install dropbear
 sed -i 's/NO_START=1/NO_START=0/g' /etc/default/dropbear
@@ -55,9 +53,8 @@ connect = 127.0.0.1:443
 accept = 990
 connect = 127.0.0.1:1194
 EOF
-# Mengaktifkan Autostart Stunnel
-sed -i 's/ENABLED=0/ENABLED=1/g' /etc/default/stunnel4
 
+sed -i 's/ENABLED=0/ENABLED=1/g' /etc/default/stunnel4
 # 4. Download Menu & Script Pendukung
 echo -e "${YELLOW}Downloading Menu Scripts from Repo...${NC}"
 wget -O /usr/bin/menu "${REPO}/menu.sh"
