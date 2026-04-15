@@ -41,8 +41,7 @@ echo -e "${CYAN}Downloading scripts from GitHub...${NC}"
 REPO="https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/main"
 
 rm -f /usr/bin/menu && wget -O /usr/bin/menu "https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/main/menu.sh" && chmod +x /usr/bin/menu && menu
-rm -f /usr/local/bin/ws-python && wget -O /usr/local/bin/ws-python "https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/main/ws-python" && chmod +x /usr/local/bin/ws-python && systemctl restart ws-python
-rm -f /usr/local/bin/ws-stunnel && wget -O /usr/local/bin/ws-stunnel "https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/main/ws-stunnel" && chmod +x /usr/local/bin/ws-stunnel
+rm -f /usr/bin/edu && wget -O /usr/bin/edu "https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/main/edu.sh" && chmod +x /usr/bin/edu
 
 # 5. MEMBUAT SERVICE SYSTEMD (WS-PYTHON)
 cat > /etc/systemd/system/ws-python.service <<EOF
