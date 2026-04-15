@@ -52,7 +52,12 @@ Restart=on-failure
 WantedBy=multi-user.target
 END
 
-# 3. Service untuk WebSocket TLS/SSL (Port 443 / Port Lain)
+# Download Script Proxy TLS dari GitHub
+wget -q -O /usr/local/bin/ws-tls https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/main/ws-tls
+
+# Memberi Izin Eksekusi agar script bisa berjalan
+chmod +x /usr/local/bin/ws-tls
+
 cat > /etc/systemd/system/ws-tls.service << END
 [Unit]
 Description=Python Proxy TLS AJI SYSTEM
