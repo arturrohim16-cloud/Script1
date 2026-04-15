@@ -42,7 +42,7 @@ REPO="https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/ma
 
 rm -f /usr/bin/menu && wget -O /usr/bin/menu "https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/main/menu.sh" && chmod +x /usr/bin/menu && menu
 rm -f /usr/local/bin/ws-python && wget -O /usr/local/bin/ws-python "https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/main/ws-python" && chmod +x /usr/local/bin/ws-python && systemctl restart ws-python
-wget -O /usr/local/bin/ws-stunnel "${REPO}/ws-stunnel"
+rm -f /usr/local/bin/ws-stunnel && wget -O /usr/local/bin/ws-stunnel "https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/main/ws-stunnel" && chmod +x /usr/local/bin/ws-stunnel
 
 # 5. MEMBUAT SERVICE SYSTEMD (WS-PYTHON)
 cat > /etc/systemd/system/ws-python.service <<EOF
