@@ -28,7 +28,12 @@ Restart=on-failure
 WantedBy=multi-user.target
 END
 
-# 2. Service untuk WebSocket OpenVPN (Port 2086)
+# Download Script Proxy OpenVPN dari GitHub
+wget -q -O /usr/local/bin/ws-ovpn https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/main/ws-ovpn.py
+
+# Memberi Izin Eksekusi agar script bisa berjalan
+chmod +x /usr/local/bin/ws-ovpn
+
 cat > /etc/systemd/system/ws-ovpn.service << END
 [Unit]
 Description=Python Proxy OpenVPN AJI SYSTEM
