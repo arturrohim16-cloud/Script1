@@ -1,101 +1,71 @@
 #!/bin/bash
 
-# ==========================================
-# Color
-RED='\033[0;31m'
-NC='\033[0m'
-GREEN='\033[0;32m'
-ORANGE='\033[0;33m'
-BLUE='\033[0;34m'
-PURPLE='\033[0;35m'
-CYAN='\033[0;36m'
-LIGHT='\033[0;37m'
-# ==========================================
-# Getting
+# --- WARNA ---
+NC='\e[0m'
+GREEN='\e[0;32m'
+CYAN='\e[0;36m'
+YELLOW='\e[0;33m'
+RED='\e[0;31m'
+L_PURPLE='\e[1;35m'
 
-domain=$(cat /etc/xray/domain)
-sldomain=$(cat /root/nsdomain)
-cdndomain=$(cat /root/awscdndomain)
-slkey=$(cat /etc/slowdns/server.pub)
+# --- DATA VPS ---
+DOMAIN=$(cat /etc/xray/domain 2>/dev/null || echo "$(curl -s ifconfig.me)")
+IP=$(curl -s ifconfig.me)
+
 clear
-read -p "Username : " Login
-read -p "Password : " Pass
-read -p "Expired (Days): " masaaktif
+echo -e "${L_PURPLE}---------------------------------------${NC}"
+echo -e "      CREATE PREMIUM SSH ACCOUNT       "
+echo -e "${L_PURPLE}---------------------------------------${NC}"
 
-IP=$(wget -qO- ipinfo.io/ip);
-ws="$(cat ~/log-install.txt | grep -w "Websocket TLS" | cut -d: -f2|sed 's/ //g')"
-ws2="$(cat ~/log-install.txt | grep -w "Websocket None TLS" | cut -d: -f2|sed 's/ //g')"
+# Input User
+read -p "   Username : " user
+if grep -w "^$user" /etc/passwd >/dev/null; then
+    echo -e "   ${RED}Error: Username [$user] sudah ada!${NC}"
+    exit 1
+fi
 
-ssl="$(cat ~/log-install.txt | grep -w "Stunnel5" | cut -d: -f2)"
-sqd="$(cat ~/log-install.txt | grep -w "Squid" | cut -d: -f2)"
-ovpn="$(netstat -nlpt | grep -i openvpn | grep -i 0.0.0.0 | awk '{print $4}' | cut -d: -f2)"
-ovpn2="$(netstat -nlpu | grep -i openvpn | grep -i 0.0.0.0 | awk '{print $4}' | cut -d: -f2)"
+read -p "   Password : " pass
+read -p "   Expired  : " masa_aktif
+
+# Animasi Loading
+echo -e -n "   ${YELLOW}Processing...${NC} "
+for ((i=0; i<10; i++)); do
+    echo -ne "${CYAN}■${NC}"
+    sleep 0.2
+done
+echo -e " ${GREEN}Done!${NC}"
+
+# Logika Tanggal
+exp=$(date -d "$masa_aktif days" +"%Y-%m-%d")
+tgl=$(date -d "$masa_aktif days" +"%d %b %Y")
+
+# Eksekusi Pembuatan User
+useradd -e $exp -M -s /bin/false $user
+echo "$user:$pass" | chpasswd
+echo "### $user $exp" >> /etc/ssh-vpn/users
+
+# --- PAYLOAD GENERATOR ---
+# Sesuaikan port bug jika diperlukan (biasanya 80 untuk WS atau 443 untuk TLS)
+PAYLOAD_WS="GET / HTTP/1.1[crlf]Host: ${DOMAIN}[crlf]Upgrade: websocket[crlf]Connection: Upgrade[crlf]User-Agent: [ua][crlf][crlf]"
+
 clear
-systemctl stop client-sldns
-systemctl stop server-sldns
-pkill sldns-server
-pkill sldns-client
-systemctl enable client-sldns
-systemctl enable server-sldns
-systemctl start client-sldns
-systemctl start server-sldns
-systemctl restart client-sldns
-systemctl restart server-sldns
-systemctl restart ws-tls
-systemctl restart ws-nontls
-systemctl restart ssh-ohp
-systemctl restart dropbear-ohp
-systemctl restart openvpn-ohp
-useradd -e `date -d "$masaaktif days" +"%Y-%m-%d"` -s /bin/false -M $Login
-expi="$(chage -l $Login | grep "Account expires" | awk -F": " '{print $2}')"
-echo -e "$Pass\n$Pass\n"|passwd $Login &> /dev/null
-hariini=`date -d "0 days" +"%Y-%m-%d"`
-expi=`date -d "$masaaktif days" +"%Y-%m-%d"`
-echo -e ""
-echo -e "Informasi SSH & OpenVPN"
-echo -e "=============================="
-echo -e "Username: $Login"
-echo -e "Password: $Pass"
-echo -e "Created: $hariini"
-echo -e "Expired: $expi"
-echo -e "===========HOST-SSH==========="
-echo -e "IP/Host: $IP"
-echo -e "Domain SSH: $domain"
-echo -e "Domain Cloudflare: $domain"
-echo -e "Domain CloudFront: $cdndomain"
-echo -e "===========SLOWDNS==========="
-echo -e "Domain Name System(DNS): 8.8.8.8"
-echo -e "Name Server(NS): $sldomain"
-echo -e "DNS PUBLIC KEY: $slkey"
-echo -e "Domain SlowDNS: $sldomain"
-echo -e "=========Service-Port========="
-echo -e "SlowDNS: 443,22,109,143"
-echo -e "OpenSSH: 22"
-echo -e "Dropbear: 443, 109, 143"
-echo -e "SSL/TLS: 443"
-echo -e "SSH Websocket SSL/TLS: 443"
-echo -e "SSH Websocket HTTP: 8880"
-echo -e "BadVPN UDPGW: 7100,7200,7300"
-echo -e "Proxy CloudFront: [OFF]"
-echo -e "Proxy Squid: [OFF]"
-echo -e "OHP SSH: 8181"
-echo -e "OHP Dropbear: 8282"
-echo -e "OHP OpenVPN: 8383"
-echo -e "OVPN Websocket: 2086"
-echo -e "OVPN Port TCP: $ovpn"
-echo -e "OVPN Port UDP: $ovpn2"
-echo -e "OVPN Port SSL: 990"
-echo -e "OVPN TCP: http://$IP:89/tcp.ovpn"
-echo -e "OVPN UDP: http://$IP:89/udp.ovpn"
-echo -e "OVPN SSL: http://$IP:89/ssl.ovpn"
-echo -e "=============================="
-echo -e "SNI/Server Spoof: isi dengan bug"
-echo -e "Payload Websocket SSL/TLS"
-echo -e "=============================="
-echo -e "GET wss://bug.com/ HTTP/1.1[crlf]Host: [host][crlf]Upgrade: websocket[crlf][crlf]"
-echo -e "=============================="
-echo -e "Payload Websocket HTTP"
-echo -e "=============================="
-echo -e "GET / HTTP/1.1[crlf]Host: [host][crlf]Upgrade: websocket[crlf][crlf]"
-echo -e "=============================="
-echo -e "Script Mod By SL"
+echo -e "${L_PURPLE}---------------------------------------${NC}"
+echo -e "      SSH ACCOUNT INFORMATION         "
+echo -e "${L_PURPLE}---------------------------------------${NC}"
+echo -e "   Username   : $user"
+echo -e "   Password   : $pass"
+echo -e "   Expired    : $tgl"
+echo -e "   Host/IP    : $DOMAIN"
+echo -e "   Port Open  : 22, 443, 80, 8080"
+echo -e "${L_PURPLE}---------------------------------------${NC}"
+echo -e "   ${CYAN}PAYLOAD HTTP WEBSOCKET:${NC}"
+echo -e "   ${YELLOW}$PAYLOAD_WS${NC}"
+echo -e "${L_PURPLE}---------------------------------------${NC}"
+echo -e "   ${CYAN}SSH TLS / SSL:${NC}"
+echo -e "   $user:$pass@$DOMAIN:443"
+echo -e "${L_PURPLE}---------------------------------------${NC}"
+echo -e "   ${CYAN}SSH HTTP CUSTOM:${NC}"
+echo -e "   $IP:80@$user:$pass"
+echo -e "${L_PURPLE}---------------------------------------${NC}"
+echo -e "         AJI STORE PREMIUM             "
+echo -e "${L_PURPLE}---------------------------------------${NC}"
