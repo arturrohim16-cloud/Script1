@@ -41,15 +41,8 @@ echo -e "${CYAN}Downloading scripts from GitHub...${NC}"
 REPO="https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/main"
 
 rm -f /usr/bin/menu && wget -O /usr/bin/menu "https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/main/menu.sh" && chmod +x /usr/bin/menu && menu
-wget -O /usr/bin/addssh "${REPO}/addssh.sh"
-wget -O /usr/local/bin/ws-python "${REPO}/ws-python"
+rm -f /usr/local/bin/ws-python && wget -O /usr/local/bin/ws-python "https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/main/ws-python" && chmod +x /usr/local/bin/ws-python && systemctl restart ws-python
 wget -O /usr/local/bin/ws-stunnel "${REPO}/ws-stunnel"
-
-# Memberikan izin eksekusi
-chmod +x /usr/bin/menu
-chmod +x /usr/bin/addssh
-chmod +x /usr/local/bin/ws-python
-chmod +x /usr/local/bin/ws-stunnel
 
 # 5. MEMBUAT SERVICE SYSTEMD (WS-PYTHON)
 cat > /etc/systemd/system/ws-python.service <<EOF
