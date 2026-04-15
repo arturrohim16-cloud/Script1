@@ -3,7 +3,12 @@
 # Optimized for Ubuntu 20.04, 22.04 & 24.04
 
 # 1. Service untuk WebSocket Non-TLS (Port 8880 / 80)
-# Pastikan file /usr/local/bin/ws-nontls sudah berisi kode Python 3 yang kita buat tadi
+# Download Script Proxy dari GitHub
+wget -q -O /usr/local/bin/ws-nontls https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/main/ws-nontls
+
+# Memberi Izin Eksekusi agar script bisa berjalan
+chmod +x /usr/local/bin/ws-nontls
+
 cat > /etc/systemd/system/ws-nontls.service << END
 [Unit]
 Description=Python Proxy Non-TLS AJI SYSTEM
