@@ -15,43 +15,43 @@ REPO="https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/ma
 
 echo -e "${CYAN}Starting Install SSH & Stunnel...${NC}"
 
-# 1. Update & Install Base Package
 apt update && apt upgrade -y
 apt install -y dropbear stunnel4 openssl wget curl
 
-# 2. Konfigurasi Dropbear
-echo -e "${GREEN}Configuring Dropbear...${NC}"
-cat > /etc/default/dropbear <<EOF
-NO_START=0
-DROPBEAR_PORT=143
-DROPBEAR_EXTRA_ARGS="-p 109 -p 447"
-DROPBEAR_BANNER="/etc/issue.net"
-DROPBEAR_RECEIVE_WINDOW=65536
-EOF
+mkdir -p /var/lib/tunnel
+openssl req -new -x509 -days 3650 -nodes -out /var/lib/tunnel/server.crt -keyout /var/lib/tunnel/server.key -subj "/C=ID/ST=Jawa/L=Jakarta/O=AjiStore/CN=aji.izz-store.my.id"
+chmod 600 /var/lib/tunnel/server.key
+chmod 644 /var/lib/tunnel/server.crt
 
-# Membuat Banner Default
-echo "AJI STORE PREMIUM" > /etc/issue.net
+apt -y install dropbear
+sed -i 's/NO_START=1/NO_START=0/g' /etc/default/dropbear
+sed -i 's/DROPBEAR_PORT=22/DROPBEAR_PORT=143/g' /etc/default/dropbear
+sed -i 's/DROPBEAR_EXTRA_ARGS=/DROPBEAR_EXTRA_ARGS="-p 109 -p 1153"/g' /etc/default/dropbear
+echo "/bin/false" >> /etc/shells
+echo "/usr/sbin/nologin" >> /etc/shells
 
-# 3. Konfigurasi Stunnel4
-echo -e "${GREEN}Configuring Stunnel4...${NC}"
 cat > /etc/stunnel/stunnel.conf <<EOF
-pid = /var/run/stunnel4.pid
-cert = /etc/stunnel/stunnel.pem
+cert = /var/lib/tunnel/server.crt
+key = /var/lib/tunnel/server.key
 client = no
 socket = a:SO_REUSEADDR=1
 socket = l:TCP_NODELAY=1
 socket = r:TCP_NODELAY=1
 
 [dropbear]
-accept = 443
-connect = 127.0.0.1:143
+accept = 445
+connect = 127.0.0.1:109
+
+[openssh]
+accept = 777
+connect = 127.0.0.1:443
+
+[openvpn]
+accept = 990
+connect = 127.0.0.1:1194
 EOF
-
-# Membuat Sertifikat SSL Self-Signed
-openssl req -new -x509 -days 365 -nodes -out /etc/stunnel/stunnel.pem -keyout /etc/stunnel/stunnel.pem -subj "/C=ID/ST=Jawa/L=Jakarta/O=AjiStore/CN=aji.izz-store.my.id"
-
 # Mengaktifkan Autostart Stunnel
-sed -i 's/ENABLED=0/ENABLED=1/g' /etc/default/stunnel4
+sed -i 's/ENABLED=0/ENABLED=1/g' /etc/default/stunnel
 
 # 4. Download Menu & Script Pendukung
 echo -e "${YELLOW}Downloading Menu Scripts from Repo...${NC}"
