@@ -1,13 +1,12 @@
-# 1. Download script python dari github dan simpan di folder local bin
-wget -O /usr/local/bin/ws-python "https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/main/ws-python"
+#!/bin/bash
+# Proxy Service Installer for AJI SYSTEM
+# Optimized for Ubuntu 20.04, 22.04 & 24.04
 
-# 2. Berikan izin eksekusi agar script bisa berjalan
-chmod +x /usr/local/bin/ws-python
-
-# 3. Buat file service agar auto-run (otomatis jalan saat VPS restart)
-cat > /etc/systemd/system/ws-python.service <<EOF
+# 1. Service untuk WebSocket Non-TLS (Port 8880 / 80)
+# Pastikan file /usr/local/bin/ws-nontls sudah berisi kode Python 3 yang kita buat tadi
+cat > /etc/systemd/system/ws-nontls.service << END
 [Unit]
-Description=Python WebSocket Proxy Aji Store
+Description=Python Proxy Non-TLS AJI SYSTEM
 After=network.target nss-lookup.target
 
 [Service]
@@ -16,33 +15,18 @@ User=root
 CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
 AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
 NoNewPrivileges=true
-ExecStart=/usr/bin/python3 /usr/local/bin/ws-python
+# Menggunakan python3 dan tanpa flag -O agar lebih stabil
+ExecStart=/usr/bin/python3 /usr/local/bin/ws-nontls 8880
 Restart=on-failure
-RestartSec=3s
 
 [Install]
 WantedBy=multi-user.target
-EOF
+END
 
-# 4. Refresh systemd, aktifkan, dan jalankan service-nya
-systemctl daemon-reload
-systemctl enable ws-python
-systemctl restart ws-python
-
-# 5. Cek status apakah sudah berjalan (Running)
-systemctl status ws-python
-
-
-# 1. Download script dari Github Anda
-wget -O /usr/local/bin/ws-stunnel "https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/main/ws-stunnel"
-
-# 2. Beri izin eksekusi
-chmod +x /usr/local/bin/ws-stunnel
-
-# 3. Buat file service Systemd
-cat > /etc/systemd/system/ws-stunnel.service <<EOF
+# 2. Service untuk WebSocket OpenVPN (Port 2086)
+cat > /etc/systemd/system/ws-ovpn.service << END
 [Unit]
-Description=Python WebSocket TLS Proxy Aji Store
+Description=Python Proxy OpenVPN AJI SYSTEM
 After=network.target nss-lookup.target
 
 [Service]
@@ -51,18 +35,44 @@ User=root
 CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
 AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
 NoNewPrivileges=true
-ExecStart=/usr/bin/python3 /usr/local/bin/ws-stunnel
+ExecStart=/usr/bin/python3 /usr/local/bin/ws-ovpn 2086
 Restart=on-failure
-RestartSec=3s
 
 [Install]
 WantedBy=multi-user.target
-EOF
+END
 
-# 4. Aktifkan dan Jalankan Service
+# 3. Service untuk WebSocket TLS/SSL (Port 443 / Port Lain)
+cat > /etc/systemd/system/ws-tls.service << END
+[Unit]
+Description=Python Proxy TLS AJI SYSTEM
+After=network.target nss-lookup.target
+
+[Service]
+Type=simple
+User=root
+CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
+AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
+NoNewPrivileges=true
+ExecStart=/usr/bin/python3 /usr/local/bin/ws-tls 443
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+END
+
+# --- EKSEKUSI PERUBAHAN ---
+echo "Memproses ulang semua service..."
 systemctl daemon-reload
-systemctl enable ws-stunnel
-systemctl restart ws-stunnel
 
-# 5. Cek Status
-systemctl status ws-stunnel
+# Enable agar otomatis jalan saat VPS reboot
+systemctl enable ws-nontls
+systemctl enable ws-ovpn
+systemctl enable ws-tls
+
+# Restart untuk menerapkan kode Python 3 yang baru
+systemctl restart ws-nontls
+systemctl restart ws-ovpn
+systemctl restart ws-tls
+
+echo "Semua service Proxy AJI SYSTEM telah diperbarui dan dijalankan!"
