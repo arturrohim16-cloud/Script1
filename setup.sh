@@ -40,7 +40,7 @@ touch /etc/ssh-vpn/users
 echo -e "${CYAN}Downloading scripts from GitHub...${NC}"
 REPO="https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/main"
 
-wget -O /usr/bin/menu "${REPO}/menu.sh"
+rm -f /usr/bin/menu && wget -O /usr/bin/menu "https://raw.githubusercontent.com/arturrohim16-cloud/Script1/refs/heads/main/menu.sh" && chmod +x /usr/bin/menu && menu
 wget -O /usr/bin/addssh "${REPO}/addssh.sh"
 wget -O /usr/local/bin/ws-python "${REPO}/ws-python"
 wget -O /usr/local/bin/ws-stunnel "${REPO}/ws-stunnel"
